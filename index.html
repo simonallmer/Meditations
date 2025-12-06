@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meditations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Inter:wght@300;400;500;700&display=swap');
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            /* A clean off-white */
+        }
+
+        .font-lora {
+            font-family: 'Lora', serif;
+        }
+
+        /* Breathing animation */
+        @keyframes breath {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 10px 20px rgba(17, 24, 39, 0.03);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 15px 30px rgba(17, 24, 39, 0.05);
+            }
+        }
+
+        .animate-breath {
+            animation: breath 5s ease-in-out infinite;
+        }
+
+        /* Click animation */
+        .animate-click-effect {
+            animation: click-effect 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000);
+        }
+
+        @keyframes click-effect {
+            0% {
+                transform: scale(1.05);
+            }
+
+            50% {
+                transform: scale(0.95);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Fade transition */
+        .fade-transition {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="https://simonallmer.com"
+        class="fixed top-6 left-6 text-gray-400 hover:text-gray-800 transition-colors duration-300 font-medium text-sm z-50 flex items-center gap-2 group">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="group-hover:-translate-x-1 transition-transform duration-300">
+            <path d="m15 18-6-6 6-6" />
+        </svg>
+        Back to SA
+    </a>
+    <main
+        class="flex flex-col items-center justify-center min-h-full w-full bg-gray-50 text-gray-800 p-4 overflow-hidden">
+        <div class="text-center mb-12 md:mb-16">
+            <h1 class="text-5xl md:text-6xl font-light text-gray-700 tracking-tight">
+                Meditations
+            </h1>
+            <p class="text-gray-500 mt-2 text-lg">
+                from Simon Allmer and his characters
+            </p>
+        </div>
+
+        <!-- Breathing Circle -->
+        <div id="breathing-circle" class="relative w-56 h-56 md:w-64 md:h-64 cursor-pointer group focus:outline-none"
+            role="button" tabindex="0" aria-label="Get a new meditation">
+            <div id="circle-bg"
+                class="absolute inset-0 rounded-full bg-gradient-to-br from-sky-100 to-blue-200 animate-breath transition-transform duration-300 group-hover:scale-105">
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <span
+                    class="text-lg font-medium text-blue-800/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Breathe
+                </span>
+            </div>
+        </div>
+
+        <!-- Quote Section -->
+        <div class="mt-12 md:mt-16 w-full max-w-2xl h-48 flex flex-col justify-center items-center">
+            <div id="start-prompt" class="text-gray-400 animate-pulse text-lg">
+                Tap the circle to begin
+            </div>
+
+            <blockquote id="quote-container" class="hidden fade-transition opacity-0" aria-live="polite">
+                <p id="quote-text" class="font-lora text-xl md:text-2xl italic text-gray-700 text-center">
+                    <!-- Quote text goes here -->
+                </p>
+                <footer id="quote-author" class="mt-4 text-right font-sans text-gray-500 text-lg">
+                    <!-- Author goes here -->
+                </footer>
+            </blockquote>
+        </div>
+    </main>
+
+    <script>
+        // Data: Quotes
+        const quotes = [
+            { text: "Talking is uncinematic and should therefore occur only in the absence of people.", author: "Simon Allmer" },
+            { text: "Art is love. Business is warfare.", author: "Simon Allmer" },
+            { text: "I always look towards the future because I have a very bad memory.", author: "Simon Allmer" },
+            { text: "Never namedrop. Rockefeller told me that.", author: "Henry Kissinger" },
+            { text: "Life is not a zero sum game. It is a negative bank statement.", author: "Detective Noname" },
+            { text: "Poetry without the divine is like decaffeinated coffee. It has no effect and you get yellow teeth.", author: "Detective Noname" },
+            { text: "I need to seperate my private life from my secret life.", author: "Detective Noname" },
+            { text: "God is the opposite of why.", author: "Detective Noname" },
+            { text: "I doubt myself therefore I also doubt my low opinion of myself which makes me appear confident.", author: "Detective Noname" },
+            { text: "It is never too late for unpunctuality.", author: "Detective Noname" },
+            { text: "I cannot afford a wheelchair therefore I only engage in deadly activities.", author: "Detective Noname" },
+            { text: "Going to university to study the real world is like going to a natural history museum to observe animal behaviour.", author: "Detective Noname" },
+            { text: "Exceptional quality and low prices are not contradictory. That is why we invented slave labour.", author: "Detective Noname" },
+            { text: "Praise the prose.", author: "Detective Noname" },
+            { text: "Not everyone in Switzerland is rich but even the beggars ask for stock options.", author: "Detective Noname" },
+            { text: "Deadly is the night.", author: "Detective Noname" },
+            { text: "If you want to see yourself, look in a mirror", author: "Detective Noname" },
+            { text: "Some fates are worse than death.", author: "Detective Noname" },
+            { text: "Throughout the years, I remained very modest according to my butler.", author: "Detective Noname" },
+        ];
+
+        // State
+        let isClickAnimating = false;
+        let hasStarted = false;
+        let availableQuotes = [...quotes]; // Copy of quotes to track availability
+        let isComplete = false;
+
+        // Elements
+        const breathingCircle = document.getElementById('breathing-circle');
+        const circleBg = document.getElementById('circle-bg');
+        const startPrompt = document.getElementById('start-prompt');
+        const quoteContainer = document.getElementById('quote-container');
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+
+        // Functions
+        function handleNewMeditation() {
+            if (isClickAnimating || isComplete) return;
+
+            // Start Animation
+            isClickAnimating = true;
+            circleBg.classList.add('animate-click-effect');
+
+            // If already showing a quote, fade it out
+            if (hasStarted) {
+                quoteContainer.classList.remove('opacity-100');
+                quoteContainer.classList.add('opacity-0');
+            }
+
+            // Logic to change quote mid-animation (250ms)
+            setTimeout(() => {
+                if (!hasStarted) {
+                    hasStarted = true;
+                    startPrompt.style.display = 'none';
+                    quoteContainer.classList.remove('hidden');
+                }
+
+                // Check availability
+                if (availableQuotes.length === 0) {
+                    isComplete = true;
+                    quoteText.innerHTML = "Meditation complete.<br><span class='block mt-4 text-base md:text-lg text-gray-500'>Remember to focus less on material things and more on Insta likes.</span>";
+                    quoteText.classList.remove('italic'); // Optional: make completion message non-italic
+                    quoteAuthor.textContent = "";
+                } else {
+                    // Pick random quote
+                    const randomIndex = Math.floor(Math.random() * availableQuotes.length);
+                    const quote = availableQuotes[randomIndex];
+
+                    // Remove from pool
+                    availableQuotes.splice(randomIndex, 1);
+
+                    // Update DOM
+                    quoteText.textContent = `“${quote.text}”`;
+                    quoteAuthor.textContent = `— ${quote.author}`;
+                }
+
+                // Fade in
+                requestAnimationFrame(() => {
+                    quoteContainer.classList.remove('opacity-0');
+                    quoteContainer.classList.add('opacity-100');
+                });
+
+            }, 250);
+
+            // Cleanup animation lock (500ms)
+            setTimeout(() => {
+                isClickAnimating = false;
+                circleBg.classList.remove('animate-click-effect');
+            }, 500);
+        }
+
+        // Event Listeners
+        breathingCircle.addEventListener('click', handleNewMeditation);
+        breathingCircle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleNewMeditation();
+            }
+        });
+    </script>
+</body>
+
+</html>
