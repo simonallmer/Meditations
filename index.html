@@ -21,16 +21,18 @@
             --sacred-red: #A0522D;
         }
 
-        html,
-        body {
-            height: 100%;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Noto Serif', serif;
             background: linear-gradient(135deg, var(--incense-smoke) 0%, var(--warm-stone) 50%, var(--incense-smoke) 100%);
+            background-attachment: fixed;
             position: relative;
             overflow-x: hidden;
+            min-height: 100%;
+            color: var(--zen-dark);
         }
 
         /* Intricate mandala pattern overlay */
@@ -42,34 +44,26 @@
             right: 0;
             bottom: 0;
             background-image:
-                /* Outer petals */
                 radial-gradient(circle at 50% 50%, transparent 48%, rgba(184, 147, 95, 0.08) 48.5%, transparent 49%),
                 radial-gradient(circle at 50% 50%, transparent 46%, rgba(184, 147, 95, 0.06) 46.5%, transparent 47%),
-                /* Middle layer - detailed petals */
                 radial-gradient(circle at 50% 50%, transparent 38%, rgba(212, 165, 116, 0.1) 38.5%, transparent 39%),
                 radial-gradient(circle at 50% 50%, transparent 36%, rgba(212, 165, 116, 0.08) 36.5%, transparent 37%),
                 radial-gradient(circle at 50% 50%, transparent 34%, rgba(184, 147, 95, 0.06) 34.5%, transparent 35%),
-                /* Inner rings */
                 radial-gradient(circle at 50% 50%, transparent 28%, rgba(212, 165, 116, 0.12) 28.5%, transparent 29%),
                 radial-gradient(circle at 50% 50%, transparent 26%, rgba(184, 147, 95, 0.08) 26.5%, transparent 27%),
                 radial-gradient(circle at 50% 50%, transparent 22%, rgba(212, 165, 116, 0.1) 22.5%, transparent 23%),
-                /* Center ornament */
                 radial-gradient(circle at 50% 50%, transparent 18%, rgba(184, 147, 95, 0.15) 18.5%, transparent 19%),
                 radial-gradient(circle at 50% 50%, transparent 15%, rgba(212, 165, 116, 0.12) 15.5%, transparent 16%),
                 radial-gradient(circle at 50% 50%, transparent 12%, rgba(184, 147, 95, 0.1) 12.5%, transparent 13%),
-                /* Core */
                 radial-gradient(circle at 50% 50%, rgba(212, 165, 116, 0.08) 8%, transparent 8.5%);
             background-size: 600px 600px;
-            background-position: center center,
-                calc(50% + 300px) calc(50% + 300px),
-                calc(50% - 300px) calc(50% - 300px),
-                calc(50% + 300px) calc(50% - 300px),
-                calc(50% - 300px) calc(50% + 300px);
+            background-position: center center;
             pointer-events: none;
             opacity: 0.7;
+            z-index: 0;
         }
 
-        /* Additional decorative layer with Sanskrit-inspired patterns */
+        /* Sanskrit-inspired radial rays */
         body::after {
             content: '';
             position: fixed;
@@ -78,24 +72,19 @@
             right: 0;
             bottom: 0;
             background-image:
-                /* Petal details */
                 repeating-conic-gradient(from 0deg at 50% 50%,
-                    transparent 0deg,
-                    transparent 14deg,
+                    transparent 0deg, transparent 14deg,
                     rgba(184, 147, 95, 0.03) 15deg,
-                    transparent 16deg,
-                    transparent 29deg),
-                /* Lotus petals effect */
+                    transparent 16deg, transparent 29deg),
                 repeating-conic-gradient(from 7.5deg at 50% 50%,
-                    transparent 0deg,
-                    transparent 29deg,
+                    transparent 0deg, transparent 29deg,
                     rgba(212, 165, 116, 0.04) 30deg,
-                    transparent 31deg,
-                    transparent 59deg);
+                    transparent 31deg, transparent 59deg);
             background-size: 600px 600px;
             background-position: center;
             pointer-events: none;
             opacity: 0.5;
+            z-index: 0;
         }
 
         .font-crimson {
@@ -127,7 +116,6 @@
             animation: breath 6s ease-in-out infinite;
         }
 
-        /* Click animation - like a gong ripple */
         .animate-click-effect {
             animation: click-effect 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000);
         }
@@ -146,12 +134,6 @@
             }
         }
 
-        /* Gentle fade like incense smoke */
-        .fade-transition {
-            transition: opacity 0.8s ease-in-out;
-        }
-
-        /* Lotus petal decoration */
         @keyframes float {
 
             0%,
@@ -166,6 +148,22 @@
 
         .floating {
             animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rise {
+            animation: rise 0.7s ease-out both;
         }
 
         /* Zen circle (Enso) inspired elements */
@@ -186,252 +184,781 @@
         .zen-circle:hover::after {
             opacity: 0.3;
         }
+
+        /* ── Navigation ─────────────────────────────── */
+        #site-header {
+            transition: background 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease;
+        }
+
+        #site-header.is-lifted {
+            background: linear-gradient(180deg, rgba(245, 241, 232, 0.94) 0%, rgba(245, 241, 232, 0.72) 70%, rgba(245, 241, 232, 0) 100%);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.35rem 0.1rem;
+            color: var(--meditation-brown);
+            font-size: 0.78rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            transition: color 0.4s ease;
+            white-space: nowrap;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: var(--temple-gold);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--sacred-red);
+        }
+
+        .nav-link.is-active {
+            color: var(--zen-dark);
+        }
+
+        .nav-link.is-active::after,
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* ── Lotus mandala ──────────────────────────── */
+        #lotus-svg {
+            width: 100%;
+            max-width: 860px;
+            height: auto;
+            overflow: visible;
+        }
+
+        .petal-group {
+            cursor: pointer;
+            transform-origin: 360px 360px;
+            transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .petal-body {
+            transition: opacity 0.5s ease, filter 0.5s ease;
+            opacity: 0.82;
+        }
+
+        .petal-group:hover .petal-body,
+        .petal-group.is-active .petal-body {
+            opacity: 1;
+            filter: drop-shadow(0 0 14px rgba(184, 147, 95, 0.65));
+        }
+
+        .petal-group:hover {
+            transform: scale(1.045);
+        }
+
+        .petal-label {
+            font-family: 'Crimson Text', serif;
+            font-size: 16px;
+            fill: var(--zen-dark);
+            letter-spacing: 0.04em;
+            transition: fill 0.4s ease;
+            pointer-events: none;
+        }
+
+        .petal-count {
+            font-family: 'Noto Serif', serif;
+            font-size: 11px;
+            fill: var(--meditation-brown);
+            letter-spacing: 0.16em;
+            pointer-events: none;
+        }
+
+        .petal-group:hover .petal-label,
+        .petal-group.is-active .petal-label {
+            fill: var(--sacred-red);
+        }
+
+        .petal-numeral {
+            font-family: 'Crimson Text', serif;
+            font-size: 15px;
+            fill: var(--lotus-white);
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        @keyframes slow-spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .ring-spin {
+            transform-origin: 360px 360px;
+            animation: slow-spin 140s linear infinite;
+        }
+
+        .ring-spin-rev {
+            transform-origin: 360px 360px;
+            animation: slow-spin 200s linear infinite reverse;
+        }
+
+        /* ── Cards & lists ──────────────────────────── */
+        .verse {
+            border-left: 1px solid rgba(184, 147, 95, 0.45);
+            padding-left: 1.5rem;
+            transition: border-color 0.4s ease, transform 0.4s ease;
+        }
+
+        .verse:hover {
+            border-left-color: var(--sacred-red);
+            transform: translateX(3px);
+        }
+
+        .rule {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(184, 147, 95, 0.55), transparent);
+        }
+
+        .topic-heading {
+            font-family: 'Crimson Text', serif;
+            letter-spacing: 0.06em;
+        }
+
+        .sanskrit-mark {
+            color: var(--temple-gold);
+            opacity: 0.55;
+        }
+
+        /* ── Mobile legend (replaces the label wreath) ── */
+        #lotus-legend {
+            display: none;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: baseline;
+            gap: 0.7rem;
+            width: 100%;
+            text-align: left;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid rgba(184, 147, 95, 0.35);
+            background: rgba(255, 249, 240, 0.55);
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .legend-item.is-active {
+            border-color: var(--sacred-red);
+            background: rgba(255, 249, 240, 0.9);
+        }
+
+        .legend-swatch {
+            width: 10px;
+            height: 10px;
+            border-radius: 50% 0 50% 0;
+            flex: none;
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 700px) {
+            #lotus-legend {
+                display: grid;
+            }
+
+            .petal-numeral {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <a href="https://simonallmer.com"
-        class="fixed top-6 left-6 transition-colors duration-300 text-sm z-50 flex items-center gap-2 group"
-        style="color: var(--meditation-brown); font-weight: 400;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="group-hover:-translate-x-1 transition-transform duration-300"
-            style="color: var(--meditation-brown);">
-            <path d="m15 18-6-6 6-6" />
-        </svg>
-        Back to SA
-    </a>
-    <main class="relative flex flex-col items-center justify-center min-h-full w-full p-4 overflow-hidden"
-        style="color: var(--zen-dark);">
-
-        <!-- Decorative Sanskrit/Devanagari Symbols -->
-        <div class="fixed top-20 left-12 text-6xl opacity-10 floating"
-            style="color: var(--temple-gold); animation-delay: 0s;">ॐ</div>
-        <div class="fixed top-32 right-16 text-5xl opacity-10 floating"
-            style="color: var(--saffron); animation-delay: 1s;">श्री</div>
-        <div class="fixed bottom-24 left-20 text-5xl opacity-10 floating"
-            style="color: var(--deep-saffron); animation-delay: 2s;">अहं</div>
-        <div class="fixed bottom-32 right-24 text-6xl opacity-10 floating"
-            style="color: var(--temple-gold); animation-delay: 3s;">सत्</div>
-        <div class="fixed top-1/2 left-8 text-4xl opacity-10 floating"
-            style="color: var(--meditation-brown); animation-delay: 4s;">धर्म</div>
-        <div class="fixed top-1/2 right-12 text-4xl opacity-10 floating"
-            style="color: var(--saffron); animation-delay: 5s;">योग</div>
-
-        <div class="text-center mb-12 md:mb-16">
-            <h1 class="text-5xl md:text-7xl font-light tracking-wide font-crimson"
-                style="color: var(--zen-dark); letter-spacing: 0.05em;">
-                Meditations
-            </h1>
-            <p class="mt-3 text-base" style="color: var(--meditation-brown); font-weight: 300;">
-                Written by <a href="http://simonallmer.com/world"
-                    class="hover:text-amber-700 transition-colors"></a>Simon Allmer</a>
-            </p>
-        </div>
-
-        <!-- Breathing Circle (Zen Enso) -->
-        <div id="breathing-circle"
-            class="relative w-64 h-64 md:w-72 md:h-72 cursor-pointer group focus:outline-none zen-circle" role="button"
-            tabindex="0" aria-label="Get a new meditation">
-            <div id="circle-bg"
-                class="absolute inset-0 rounded-full animate-breath transition-transform duration-500 group-hover:scale-105"
-                style="background: radial-gradient(circle at 30% 30%, var(--saffron), var(--deep-saffron)); border: 2px solid var(--temple-gold);">
-            </div>
-            <div class="absolute inset-0 flex items-center justify-center">
-                <span class="text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 font-crimson"
-                    style="color: var(--lotus-white); font-weight: 400; letter-spacing: 0.1em;">
-                    ॐ
-                </span>
-            </div>
-        </div>
-
-        <!-- Quote Section -->
-        <div class="mt-16 md:mt-20 w-full max-w-3xl min-h-[280px] flex flex-col justify-center items-center px-6">
-            <div id="start-prompt" class="animate-pulse text-lg font-crimson"
-                style="color: var(--meditation-brown); opacity: 0.6;">
-                Begin your meditation
-            </div>
-
-            <blockquote id="quote-container" class="hidden w-full" aria-live="polite">
-                <p id="quote-text" class="font-crimson text-2xl md:text-3xl italic text-center leading-relaxed mb-8"
-                    style="color: var(--zen-dark);">
-                    <!-- Quote text goes here -->
-                </p>
-                <footer id="quote-author" class="mt-6 text-right text-base"
-                    style="color: var(--meditation-brown); font-weight: 400;">
-                    <!-- Author goes here -->
-                </footer>
-            </blockquote>
-        </div>
-
-        <!-- Navigation Arrows -->
-        <div id="nav-arrows" class="hidden mt-10 flex items-center gap-10 fade-transition opacity-0">
-            <button id="prev-arrow"
-                class="group flex items-center justify-center w-14 h-14 rounded-full backdrop-blur-sm transition-all duration-500 disabled:opacity-20 disabled:cursor-not-allowed"
-                style="background: var(--lotus-white); border: 2px solid var(--temple-gold); box-shadow: 0 4px 12px rgba(184, 147, 95, 0.2);"
-                aria-label="Previous quote" disabled>
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                    class="group-hover:-translate-x-1 transition-transform duration-300 group-disabled:group-hover:translate-x-0"
-                    style="color: var(--meditation-brown);">
+    <!-- ── Top bar ─────────────────────────────────── -->
+    <header class="sticky top-0 z-40 w-full px-5 md:px-10 pt-5 pb-4" id="site-header">
+        <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+            <a href="https://simonallmer.com" class="flex items-center gap-2 group nav-link" style="letter-spacing: 0.18em;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="group-hover:-translate-x-1 transition-transform duration-300">
                     <path d="m15 18-6-6 6-6" />
                 </svg>
-            </button>
+                <span class="hidden sm:inline">Back to SA</span>
+            </a>
 
-            <button id="next-arrow"
-                class="group flex items-center justify-center w-14 h-14 rounded-full backdrop-blur-sm transition-all duration-500 disabled:opacity-20 disabled:cursor-not-allowed"
-                style="background: var(--lotus-white); border: 2px solid var(--temple-gold); box-shadow: 0 4px 12px rgba(184, 147, 95, 0.2);"
-                aria-label="Next quote" disabled>
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                    class="group-hover:translate-x-1 transition-transform duration-300 group-disabled:group-hover:translate-x-0"
-                    style="color: var(--meditation-brown);">
-                    <path d="m9 18 6-6-6-6" />
-                </svg>
-            </button>
+            <nav class="flex items-center gap-5 md:gap-9">
+                <button class="nav-link is-active" data-view="meditate">Meditate</button>
+                <button class="nav-link" data-view="lotus">The Lotus</button>
+                <button class="nav-link" data-view="all">View All</button>
+            </nav>
         </div>
+    </header>
+
+    <main class="relative z-10 w-full">
+
+        <!-- Decorative Sanskrit/Devanagari Symbols -->
+        <div class="pointer-events-none select-none">
+            <div class="fixed top-24 left-10 text-6xl opacity-10 floating" style="color: var(--temple-gold); animation-delay: 0s;">ॐ</div>
+            <div class="fixed top-36 right-14 text-5xl opacity-10 floating" style="color: var(--saffron); animation-delay: 1s;">श्री</div>
+            <div class="fixed bottom-24 left-16 text-5xl opacity-10 floating" style="color: var(--deep-saffron); animation-delay: 2s;">अहं</div>
+            <div class="fixed bottom-36 right-20 text-6xl opacity-10 floating" style="color: var(--temple-gold); animation-delay: 3s;">सत्</div>
+            <div class="fixed top-1/2 left-6 text-4xl opacity-10 floating" style="color: var(--meditation-brown); animation-delay: 4s;">धर्म</div>
+            <div class="fixed top-1/2 right-8 text-4xl opacity-10 floating" style="color: var(--saffron); animation-delay: 5s;">योग</div>
+        </div>
+
+        <!-- ══ VIEW: MEDITATE ══════════════════════════ -->
+        <section id="view-meditate" class="flex flex-col items-center justify-center w-full px-4 pt-6 pb-24"
+            style="min-height: calc(100vh - 88px);">
+
+            <div class="text-center mb-10 md:mb-14">
+                <h1 class="text-5xl md:text-7xl font-light tracking-wide font-crimson"
+                    style="color: var(--zen-dark); letter-spacing: 0.05em;">
+                    Meditations
+                </h1>
+                <p class="mt-3 text-base" style="color: var(--meditation-brown); font-weight: 300;">
+                    Written by <a href="http://simonallmer.com/world" class="hover:text-amber-700 transition-colors">Simon Allmer</a>
+                </p>
+            </div>
+
+            <!-- Breathing Circle (Zen Enso) -->
+            <div id="breathing-circle"
+                class="relative w-56 h-56 md:w-72 md:h-72 cursor-pointer group focus:outline-none zen-circle" role="button"
+                tabindex="0" aria-label="Get a new meditation">
+                <div id="circle-bg"
+                    class="absolute inset-0 rounded-full animate-breath transition-transform duration-500 group-hover:scale-105"
+                    style="background: radial-gradient(circle at 30% 30%, var(--saffron), var(--deep-saffron)); border: 2px solid var(--temple-gold);">
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 font-crimson"
+                        style="color: var(--lotus-white); font-weight: 400; letter-spacing: 0.1em;">
+                        ॐ
+                    </span>
+                </div>
+            </div>
+
+            <!-- Quote Section -->
+            <div class="mt-14 md:mt-16 w-full max-w-3xl min-h-[260px] flex flex-col justify-center items-center px-2">
+                <div id="start-prompt" class="animate-pulse text-lg font-crimson"
+                    style="color: var(--meditation-brown); opacity: 0.6;">
+                    Begin your meditation
+                </div>
+
+                <blockquote id="quote-container" class="hidden w-full" aria-live="polite">
+                    <p id="quote-text" class="font-crimson text-2xl md:text-3xl italic text-center leading-relaxed mb-6"
+                        style="color: var(--zen-dark);"></p>
+                    <footer class="mt-6 flex flex-col items-end gap-2">
+                        <div id="quote-author" class="text-right text-base" style="color: var(--meditation-brown); font-weight: 400;"></div>
+                        <button id="quote-topic" class="hidden text-xs tracking-[0.2em] uppercase transition-colors duration-300"
+                            style="color: var(--temple-gold);"></button>
+                    </footer>
+                </blockquote>
+            </div>
+
+            <!-- Navigation Arrows -->
+            <div id="nav-arrows" class="hidden mt-8 flex items-center gap-10">
+                <button id="prev-arrow"
+                    class="group flex items-center justify-center w-14 h-14 rounded-full transition-all duration-500 disabled:opacity-20 disabled:cursor-not-allowed"
+                    style="background: var(--lotus-white); border: 2px solid var(--temple-gold); box-shadow: 0 4px 12px rgba(184, 147, 95, 0.2);"
+                    aria-label="Previous quote" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                        class="group-hover:-translate-x-1 transition-transform duration-300"
+                        style="color: var(--meditation-brown);">
+                        <path d="m15 18-6-6 6-6" />
+                    </svg>
+                </button>
+
+                <button id="next-arrow"
+                    class="group flex items-center justify-center w-14 h-14 rounded-full transition-all duration-500 disabled:opacity-20 disabled:cursor-not-allowed"
+                    style="background: var(--lotus-white); border: 2px solid var(--temple-gold); box-shadow: 0 4px 12px rgba(184, 147, 95, 0.2);"
+                    aria-label="Next quote" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                        class="group-hover:translate-x-1 transition-transform duration-300"
+                        style="color: var(--meditation-brown);">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- ══ VIEW: THE LOTUS ═════════════════════════ -->
+        <section id="view-lotus" class="hidden w-full px-4 pt-4 pb-28">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-light font-crimson" style="letter-spacing: 0.05em;">The Lotus</h2>
+                <p class="mt-3 text-sm md:text-base max-w-xl mx-auto" style="color: var(--meditation-brown); font-weight: 300;">
+                    Every meditation belongs to a petal. The fuller the thought, the wider it opens.
+                </p>
+                <div class="rule my-8 mx-auto max-w-md"></div>
+            </div>
+
+            <div class="flex justify-center">
+                <svg id="lotus-svg" viewBox="-105 42 930 636" role="group" aria-label="Lotus of topics"></svg>
+            </div>
+
+            <!-- Legend, shown on narrow screens where the wreath of names cannot breathe -->
+            <div id="lotus-legend" class="max-w-md mx-auto mt-8 gap-2 px-1"></div>
+
+            <!-- Petal contents -->
+            <div id="petal-panel" class="hidden max-w-3xl mx-auto mt-14 px-2" style="scroll-margin-top: 92px;"></div>
+        </section>
+
+        <!-- ══ VIEW: ALL ═══════════════════════════════ -->
+        <section id="view-all" class="hidden w-full px-4 pt-4 pb-28">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-light font-crimson" style="letter-spacing: 0.05em;">All Meditations</h2>
+                <p id="all-count" class="mt-3 text-sm" style="color: var(--meditation-brown); font-weight: 300;"></p>
+                <div class="rule my-8 mx-auto max-w-md"></div>
+            </div>
+            <div id="all-list" class="max-w-3xl mx-auto"></div>
+        </section>
     </main>
 
+    <footer class="relative z-10 pb-10 text-center text-xs" style="color: var(--meditation-brown); opacity: 0.6; letter-spacing: 0.18em;">
+        ॐ
+    </footer>
+
     <script>
-        // Data: Quotes with author URLs
-        const quotes = [
-            { text: "Talking is uncinematic and should therefore occur only in the absence of people.", author: "Simon Allmer", url: "http://simonallmer.com/world" },
-            { text: "Art is love. Business is warfare.", author: "Simon Allmer", url: "http://simonallmer.com/world" },
-            { text: "I always look towards the future because I have a very bad memory.", author: "Simon Allmer", url: "http://simonallmer.com/world" },
-            { text: "Never namedrop. Rockefeller told me that.", author: "Henry Kissinger", url: "https://simonallmer.com/americanportrait" },
-            { text: "One does not gain power through unscrupulousness alone. It also takes cynicism.", author: "Henry Kissinger", url: "https://simonallmer.com/americanportrait" },
-            { text: "Life is not a zero sum game. It is a negative bank statement.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "Poetry without the divine is like decaffeinated coffee. It has no effect and you get yellow teeth.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "I need to seperate my private life from my secret life.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "God is the opposite of why.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "I doubt myself therefore I also doubt my low opinion of myself which makes me appear confident.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "It is never too late for unpunctuality.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "I cannot afford a wheelchair therefore I only engage in deadly activities.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "Going to university to study the real world is like going to a natural history museum to observe animal behaviour.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "Exceptional quality and low prices are not contradictory. That is why we invented slave labour.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "Praise the prose.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "Not everyone in Switzerland is rich but even the beggars ask for stock options.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "Deadly is the night.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "If you want to see yourself, look in a mirror", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "Some fates are worse than death.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "Throughout the years, I remained very modest according to my butler.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname" },
-            { text: "The media is just like my dog Checkers. When neglected, they keep sniffing around the house, digging up old bones. And worst of all, they start barking until everyone watches from the street. But give them some attention, pat them on the back, and in no time even the crooked media can become a man’s best friend.", author: "Richard Nixon", url: "https://simonallmer.com/americanportrait" },
+        /* ────────────────────────────────────────────
+           TOPICS — the petals of the lotus
+        ──────────────────────────────────────────── */
+        const topics = [
+            { id: 'nameless', name: 'The Nameless', sub: 'Of the divine, and what refuses explanation', mark: 'ॐ' },
+            { id: 'tongue', name: 'The Still Tongue', sub: 'Of speech, silence and names', mark: 'वाच्' },
+            { id: 'hand', name: 'The Iron Hand', sub: 'Of power and the games men play for it', mark: 'बल' },
+            { id: 'coin', name: 'The Weight of Coin', sub: 'Of wealth, and of wanting', mark: 'धन' },
+            { id: 'faces', name: 'The Two Faces', sub: 'Of the self and the masks it wears', mark: 'अहं' },
+            { id: 'hour', name: 'The Passing Hour', sub: 'Of time, memory and forgetting', mark: 'काल' },
+            { id: 'night', name: 'The Long Night', sub: 'Of death, danger and fate', mark: 'मृत्यु' },
+            { id: 'path', name: 'The Untaught Path', sub: 'Of learning that no school can give', mark: 'विद्या' },
+            { id: 'heart', name: 'The Beating Heart', sub: 'Of the body and its rhythm', mark: 'हृद्' },
         ];
 
-        // State
+        const topicById = Object.fromEntries(topics.map(t => [t.id, t]));
+
+        /* ────────────────────────────────────────────
+           QUOTES
+        ──────────────────────────────────────────── */
+        const quotes = [
+            { text: "Talking is uncinematic and should therefore occur only in the absence of people.", author: "Simon Allmer", url: "http://simonallmer.com/world", topic: 'tongue' },
+            { text: "Art is love. Business is warfare.", author: "Simon Allmer", url: "http://simonallmer.com/world", topic: 'hand' },
+            { text: "I always look towards the future because I have a very bad memory.", author: "Simon Allmer", url: "http://simonallmer.com/world", topic: 'hour' },
+            { text: "Anyone who has a heart, has a rhythm inside them.", author: "Simon Allmer", url: "http://simonallmer.com/world", topic: 'heart' },
+            { text: "My highest educational qualification is dance school.", author: "Simon Allmer", url: "http://simonallmer.com/world", topic: 'path' },
+            { text: "Never namedrop. Rockefeller told me that.", author: "Henry Kissinger", url: "https://simonallmer.com/americanportrait", topic: 'tongue' },
+            { text: "One does not gain power through unscrupulousness alone. It also takes cynicism.", author: "Henry Kissinger", url: "https://simonallmer.com/americanportrait", topic: 'hand' },
+            { text: "The media is just like my dog Checkers. When neglected, they keep sniffing around the house, digging up old bones. And worst of all, they start barking until everyone watches from the street. But give them some attention, pat them on the back, and in no time even the crooked media can become a man’s best friend.", author: "Richard Nixon", url: "https://simonallmer.com/americanportrait", topic: 'hand' },
+            { text: "Life is not a zero sum game. It is a negative bank statement.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'coin' },
+            { text: "Poetry without the divine is like decaffeinated coffee. It has no effect and you get yellow teeth.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'nameless' },
+            { text: "I need to seperate my private life from my secret life.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'faces' },
+            { text: "God is the opposite of why.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'nameless' },
+            { text: "I doubt myself therefore I also doubt my low opinion of myself which makes me appear confident.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'faces' },
+            { text: "It is never too late for unpunctuality.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'hour' },
+            { text: "I can't afford a wheelchair so I only do deadly stunts.", author: "Simon Allmer", url: "http://simonallmer.com/world", topic: 'night' },
+            { text: "Going to university to study the real world is like going to a natural history museum to observe animal behaviour.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'path' },
+            { text: "Exceptional quality and low prices are not contradictory. That is why we invented slave labour.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'hand' },
+            { text: "Praise the prose.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'tongue' },
+            { text: "Not everyone in Switzerland is rich but even the beggars ask for stock options.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'coin' },
+            { text: "Deadly is the night.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'night' },
+            { text: "If you want to see yourself, look in a mirror", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'faces' },
+            { text: "Some fates are worse than death.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'night' },
+            { text: "Throughout the years, I remained very modest according to my butler.", author: "Detective Noname", url: "https://simonallmer.com/detectivenoname", topic: 'faces' },
+        ];
+
+        const quotesByTopic = id => quotes.filter(q => q.topic === id);
+
+        /* ────────────────────────────────────────────
+           VIEW SWITCHING
+        ──────────────────────────────────────────── */
+        const views = {
+            meditate: document.getElementById('view-meditate'),
+            lotus: document.getElementById('view-lotus'),
+            all: document.getElementById('view-all'),
+        };
+        const navButtons = [...document.querySelectorAll('.nav-link[data-view]')];
+
+        function showView(name) {
+            Object.entries(views).forEach(([key, el]) => el.classList.toggle('hidden', key !== name));
+            navButtons.forEach(b => b.classList.toggle('is-active', b.dataset.view === name));
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        }
+
+        navButtons.forEach(btn => btn.addEventListener('click', () => showView(btn.dataset.view)));
+
+        /* ────────────────────────────────────────────
+           THE LOTUS — petal size ∝ number of quotes
+        ──────────────────────────────────────────── */
+        const SVG_NS = 'http://www.w3.org/2000/svg';
+        const CX = 360, CY = 360;
+        const lotus = document.getElementById('lotus-svg');
+        const petalPanel = document.getElementById('petal-panel');
+
+        function el(tag, attrs, text) {
+            const node = document.createElementNS(SVG_NS, tag);
+            for (const k in attrs) node.setAttribute(k, attrs[k]);
+            if (text !== undefined) node.textContent = text;
+            return node;
+        }
+
+        // Petal outline: a lotus leaf pointing "up" from the origin.
+        function petalPath(len) {
+            const w = len * 0.36;
+            return `M 0 0
+                    C ${-w} ${-len * 0.34}, ${-w * 0.66} ${-len * 0.82}, 0 ${-len}
+                    C ${w * 0.66} ${-len * 0.82}, ${w} ${-len * 0.34}, 0 0 Z`;
+        }
+
+        // Narrow screens get a compact bloom: the name wreath is dropped for a legend below.
+        const compactQuery = window.matchMedia('(max-width: 700px)');
+
+        function buildLotus() {
+            const compact = compactQuery.matches;
+            lotus.setAttribute('viewBox', compact ? '92 92 536 536' : '-105 42 930 636');
+            // decorative rings pull in when there is no wreath of names to sit inside
+            const R_RING = compact ? 252 : 300;
+            const R_DOTS = compact ? 262 : 310;
+            const R_DASH = compact ? 234 : 262;
+            lotus.innerHTML = '';
+            const defs = el('defs');
+            const n = topics.length;
+            const step = 360 / n;
+
+            // per-petal gradient, hue drifting saffron → sacred red around the wheel
+            topics.forEach((t, i) => {
+                const hue = 44 - (i / n) * 28;
+                const grad = el('linearGradient', { id: `grad-${t.id}`, x1: '0', y1: '1', x2: '0', y2: '0' });
+                grad.appendChild(el('stop', { offset: '0%', 'stop-color': `hsl(${hue}, 52%, 74%)` }));
+                grad.appendChild(el('stop', { offset: '55%', 'stop-color': `hsl(${hue}, 46%, 63%)` }));
+                grad.appendChild(el('stop', { offset: '100%', 'stop-color': `hsl(${hue - 6}, 42%, 50%)` }));
+                defs.appendChild(grad);
+                t._hue = hue;
+            });
+            lotus.appendChild(defs);
+
+            // ── outer mandala rings
+            const rings = el('g', { class: 'ring-spin' });
+            rings.appendChild(el('circle', { cx: CX, cy: CY, r: R_RING, fill: 'none', stroke: 'rgba(184,147,95,0.28)', 'stroke-width': 1 }));
+            rings.appendChild(el('circle', { cx: CX, cy: CY, r: R_RING - 8, fill: 'none', stroke: 'rgba(184,147,95,0.16)', 'stroke-width': 1, 'stroke-dasharray': '2 9' }));
+            for (let i = 0; i < 72; i++) {
+                const a = (i * 5) * Math.PI / 180;
+                rings.appendChild(el('circle', {
+                    cx: CX + Math.sin(a) * R_DOTS, cy: CY - Math.cos(a) * R_DOTS,
+                    r: i % 6 === 0 ? 2.6 : 1.1, fill: 'rgba(184,147,95,0.4)'
+                }));
+            }
+            lotus.appendChild(rings);
+
+            const innerRings = el('g', { class: 'ring-spin-rev' });
+            innerRings.appendChild(el('circle', { cx: CX, cy: CY, r: R_DASH, fill: 'none', stroke: 'rgba(160,82,45,0.14)', 'stroke-width': 1, 'stroke-dasharray': '14 10' }));
+            lotus.appendChild(innerRings);
+
+            const maxCount = Math.max(...topics.map(t => quotesByTopic(t.id).length));
+
+            // ── under-layer: a soft petal between each pair, for fullness
+            const underLayer = el('g', { opacity: '0.35' });
+            topics.forEach((t, i) => {
+                const g = el('g', { transform: `translate(${CX} ${CY}) rotate(${i * step + step / 2})` });
+                g.appendChild(el('path', {
+                    d: petalPath(96),
+                    fill: 'rgba(232,220,196,0.9)',
+                    stroke: 'rgba(184,147,95,0.4)',
+                    'stroke-width': 1
+                }));
+                underLayer.appendChild(g);
+            });
+            lotus.appendChild(underLayer);
+
+            // ── the nine petals
+            topics.forEach((t, i) => {
+                const list = quotesByTopic(t.id);
+                const count = list.length;
+                // length grows directly with the number of meditations
+                const len = 92 + count * 34;
+                const angle = i * step;
+                const rad = angle * Math.PI / 180;
+
+                const g = el('g', { class: 'petal-group', 'data-topic': t.id, role: 'button', tabindex: '0' });
+                g.setAttribute('aria-label', `${t.name}, ${count} meditation${count === 1 ? '' : 's'}`);
+
+                const rot = el('g', { transform: `translate(${CX} ${CY}) rotate(${angle})`, class: 'petal-body' });
+                rot.appendChild(el('path', {
+                    d: petalPath(len),
+                    fill: `url(#grad-${t.id})`,
+                    stroke: `hsl(${t._hue - 8}, 38%, 38%)`,
+                    'stroke-width': 1.2,
+                    'stroke-linejoin': 'round'
+                }));
+                // inner vein petal
+                rot.appendChild(el('path', {
+                    d: petalPath(len * 0.6),
+                    fill: 'rgba(255,249,240,0.22)',
+                    stroke: 'rgba(255,249,240,0.5)',
+                    'stroke-width': 0.9
+                }));
+                rot.appendChild(el('line', {
+                    x1: 0, y1: -len * 0.12, x2: 0, y2: -len * 0.9,
+                    stroke: 'rgba(255,249,240,0.45)', 'stroke-width': 0.9
+                }));
+                // count numeral, held near the tip and kept upright
+                const numY = -len * 0.72;
+                const nx = CX + Math.sin(rad) * (len * 0.72);
+                const ny = CY - Math.cos(rad) * (len * 0.72);
+                g.appendChild(rot);
+                g.appendChild(el('text', {
+                    class: 'petal-numeral', x: nx, y: ny + 5, 'text-anchor': 'middle'
+                }, count));
+
+                if (!compact) {
+                    // labels all sit on one outer ring, so the names read as a wreath
+                    const LABEL_R = 262;
+                    const lx = CX + Math.sin(rad) * LABEL_R;
+                    const ly = CY - Math.cos(rad) * LABEL_R;
+                    const s = Math.sin(rad);
+
+                    // dotted leader from the petal tip out to its name
+                    g.appendChild(el('line', {
+                        x1: CX + Math.sin(rad) * (len + 10), y1: CY - Math.cos(rad) * (len + 10),
+                        x2: CX + Math.sin(rad) * (LABEL_R - 16), y2: CY - Math.cos(rad) * (LABEL_R - 16),
+                        stroke: 'rgba(184,147,95,0.45)', 'stroke-width': 1, 'stroke-dasharray': '2 5'
+                    }));
+                    const anchor = s > 0.25 ? 'start' : (s < -0.25 ? 'end' : 'middle');
+                    const dx = anchor === 'start' ? 4 : (anchor === 'end' ? -4 : 0);
+                    g.appendChild(el('text', { class: 'petal-label', x: lx + dx, y: ly, 'text-anchor': anchor }, t.name));
+                    g.appendChild(el('text', {
+                        class: 'petal-count', x: lx + dx, y: ly + 17, 'text-anchor': anchor
+                    }, `${count} MEDITATION${count === 1 ? '' : 'S'}`));
+                }
+
+                g.addEventListener('click', () => selectTopic(t.id));
+                g.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectTopic(t.id); }
+                });
+                lotus.appendChild(g);
+            });
+
+            // ── heart of the lotus
+            const core = el('g');
+            core.appendChild(el('circle', { cx: CX, cy: CY, r: 58, fill: 'var(--lotus-white)', stroke: 'var(--temple-gold)', 'stroke-width': 1.5 }));
+            core.appendChild(el('circle', { cx: CX, cy: CY, r: 48, fill: 'none', stroke: 'rgba(184,147,95,0.5)', 'stroke-width': 1, 'stroke-dasharray': '3 5' }));
+            for (let i = 0; i < 12; i++) {
+                const a = (i * 30) * Math.PI / 180;
+                core.appendChild(el('circle', { cx: CX + Math.sin(a) * 38, cy: CY - Math.cos(a) * 38, r: 1.6, fill: 'var(--temple-gold)' }));
+            }
+            const om = el('text', { x: CX, y: CY + 4, 'text-anchor': 'middle', fill: 'var(--sacred-red)', 'font-size': '30', 'font-family': "'Noto Serif', serif" }, 'ॐ');
+            core.appendChild(om);
+            core.appendChild(el('text', {
+                x: CX, y: CY + 26, 'text-anchor': 'middle', fill: 'var(--meditation-brown)',
+                'font-size': '11', 'letter-spacing': '2', 'font-family': "'Noto Serif', serif"
+            }, `${quotes.length} IN ALL`));
+            lotus.appendChild(core);
+        }
+
+        function buildLegend() {
+            const legend = document.getElementById('lotus-legend');
+            legend.innerHTML = '';
+            topics.forEach(t => {
+                const count = quotesByTopic(t.id).length;
+                const btn = document.createElement('button');
+                btn.className = 'legend-item';
+                btn.dataset.topic = t.id;
+                btn.innerHTML = `
+                    <span class="legend-swatch" style="background: hsl(${t._hue}, 46%, 60%);"></span>
+                    <span class="flex-1">
+                        <span class="font-crimson text-lg" style="color: var(--zen-dark);">${t.name}</span>
+                        <span class="block text-[0.68rem] tracking-[0.18em] uppercase mt-0.5" style="color: var(--meditation-brown);">${count} meditation${count === 1 ? '' : 's'}</span>
+                    </span>
+                    <span class="sanskrit-mark text-base">${t.mark}</span>`;
+                btn.addEventListener('click', () => selectTopic(t.id));
+                legend.appendChild(btn);
+            });
+        }
+
+        /* ── petal panel ─────────────────────────── */
+        function selectTopic(id) {
+            activeTopic = id;
+            document.querySelectorAll('.petal-group').forEach(g => {
+                g.classList.toggle('is-active', g.dataset.topic === id);
+            });
+            document.querySelectorAll('.legend-item').forEach(b => {
+                b.classList.toggle('is-active', b.dataset.topic === id);
+            });
+
+            const t = topicById[id];
+            const list = quotesByTopic(id);
+
+            petalPanel.innerHTML = '';
+            petalPanel.classList.remove('hidden');
+
+            const wrap = document.createElement('div');
+            wrap.className = 'rise';
+            wrap.innerHTML = `
+                <div class="text-center">
+                    <div class="text-3xl mb-2 sanskrit-mark">${t.mark}</div>
+                    <h3 class="topic-heading text-3xl md:text-4xl font-light">${t.name}</h3>
+                    <p class="mt-2 text-sm md:text-base italic" style="color: var(--meditation-brown); font-weight: 300;">${t.sub}</p>
+                    <div class="rule my-8 mx-auto max-w-xs"></div>
+                </div>
+                <div class="space-y-9">
+                    ${list.map(q => verseHTML(q, false)).join('')}
+                </div>
+            `;
+            petalPanel.appendChild(wrap);
+            petalPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function esc(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function verseHTML(q, withTopic) {
+            const tag = withTopic
+                ? `<span class="text-[0.68rem] uppercase tracking-[0.2em]" style="color: var(--temple-gold);">${esc(topicById[q.topic].name)}</span>`
+                : '';
+            return `
+                <div class="verse">
+                    <p class="font-crimson italic text-xl md:text-2xl leading-relaxed" style="color: var(--zen-dark);">“${esc(q.text)}”</p>
+                    <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+                        <a href="${esc(q.url)}" class="text-sm underline"
+                           style="color: var(--meditation-brown); text-decoration-color: var(--temple-gold); text-underline-offset: 3px;">— ${esc(q.author)}</a>
+                        ${tag}
+                    </div>
+                </div>`;
+        }
+
+        /* ────────────────────────────────────────────
+           VIEW ALL
+        ──────────────────────────────────────────── */
+        function buildAll() {
+            const listEl = document.getElementById('all-list');
+            document.getElementById('all-count').textContent =
+                `${quotes.length} meditations across ${topics.length} petals`;
+
+            listEl.innerHTML = topics.map(t => {
+                const list = quotesByTopic(t.id);
+                if (!list.length) return '';
+                return `
+                    <section class="mb-16">
+                        <div class="flex items-baseline gap-3 mb-1">
+                            <span class="text-xl sanskrit-mark">${t.mark}</span>
+                            <h3 class="topic-heading text-2xl md:text-3xl font-light">${t.name}</h3>
+                            <span class="text-xs tracking-[0.2em]" style="color: var(--temple-gold);">${list.length}</span>
+                        </div>
+                        <p class="text-sm italic mb-6" style="color: var(--meditation-brown); font-weight: 300;">${t.sub}</p>
+                        <div class="space-y-8">${list.map(q => verseHTML(q, false)).join('')}</div>
+                    </section>`;
+            }).join('<div class="rule my-12 mx-auto max-w-sm"></div>');
+        }
+
+        /* ────────────────────────────────────────────
+           MEDITATE (the random draw)
+        ──────────────────────────────────────────── */
         let isClickAnimating = false;
         let hasStarted = false;
-        let availableQuotes = [...quotes]; // Copy of quotes to track availability
+        let availableQuotes = [...quotes];
         let isComplete = false;
-        let quoteHistory = []; // Track all shown quotes
-        let currentHistoryIndex = -1; // Current position in history
+        let quoteHistory = [];
+        let currentHistoryIndex = -1;
 
-        // Elements
         const breathingCircle = document.getElementById('breathing-circle');
         const circleBg = document.getElementById('circle-bg');
         const startPrompt = document.getElementById('start-prompt');
         const quoteContainer = document.getElementById('quote-container');
         const quoteText = document.getElementById('quote-text');
         const quoteAuthor = document.getElementById('quote-author');
+        const quoteTopic = document.getElementById('quote-topic');
         const navArrows = document.getElementById('nav-arrows');
         const prevArrow = document.getElementById('prev-arrow');
         const nextArrow = document.getElementById('next-arrow');
 
-        // Helper function to update arrow states
         function updateArrowStates() {
             prevArrow.disabled = currentHistoryIndex <= 0;
             nextArrow.disabled = currentHistoryIndex >= quoteHistory.length - 1;
         }
 
-        // Helper function to display a quote
         function displayQuote(quote) {
             if (quote.isComplete) {
-                quoteText.innerHTML = "Meditation complete.<br><span class='block mt-4 text-base md:text-lg text-gray-500'>Remember to focus less on material wealth and more on Insta likes.</span>";
+                quoteText.innerHTML = "Meditation complete.<br><span class='block mt-4 text-base md:text-lg' style='color: var(--meditation-brown);'>Remember to focus less on material wealth and more on Insta likes.</span>";
                 quoteText.classList.remove('italic');
                 quoteAuthor.innerHTML = "";
+                quoteTopic.classList.add('hidden');
             } else {
-                quoteText.textContent = `"${quote.text}"`;
+                quoteText.textContent = `“${quote.text}”`;
                 quoteText.classList.add('italic');
 
-                // Update author with link if URL exists
                 if (quote.url) {
-                    quoteAuthor.innerHTML = `— <a href="${quote.url}" class="transition-colors duration-500 underline" style="color: var(--meditation-brown); text-decoration-color: var(--temple-gold); text-underline-offset: 3px;">${quote.author}</a>`;
+                    quoteAuthor.innerHTML = `— <a href="${quote.url}" class="transition-colors duration-500 underline" style="color: var(--meditation-brown); text-decoration-color: var(--temple-gold); text-underline-offset: 3px;">${esc(quote.author)}</a>`;
                 } else {
                     quoteAuthor.textContent = `— ${quote.author}`;
+                }
+
+                const t = topicById[quote.topic];
+                if (t) {
+                    quoteTopic.textContent = t.name;
+                    quoteTopic.classList.remove('hidden');
+                    quoteTopic.onclick = () => { showView('lotus'); selectTopic(t.id); };
+                } else {
+                    quoteTopic.classList.add('hidden');
                 }
             }
         }
 
-        // Functions
         function handleNewMeditation() {
             if (isClickAnimating || isComplete) return;
 
-            // If we're viewing a past quote, move forward in history instead
             if (currentHistoryIndex < quoteHistory.length - 1) {
                 navigateQuote(1);
                 return;
             }
 
-            // Start Animation (circle only)
             isClickAnimating = true;
             circleBg.classList.add('animate-click-effect');
 
-            // Simple timeout for circle animation
             setTimeout(() => {
                 if (!hasStarted) {
                     hasStarted = true;
                     startPrompt.style.display = 'none';
                     quoteContainer.classList.remove('hidden');
-                    // Show navigation arrows
                     navArrows.classList.remove('hidden');
                 }
 
                 let newQuote;
-
-                // Check availability
                 if (availableQuotes.length === 0) {
                     isComplete = true;
                     newQuote = { isComplete: true };
                 } else {
-                    // Pick random quote
                     const randomIndex = Math.floor(Math.random() * availableQuotes.length);
                     newQuote = availableQuotes[randomIndex];
-
-                    // Remove from pool
                     availableQuotes.splice(randomIndex, 1);
                 }
 
-                // Add to history
                 quoteHistory.push(newQuote);
                 currentHistoryIndex = quoteHistory.length - 1;
 
-                // Display the quote immediately (no fade)
                 displayQuote(newQuote);
                 updateArrowStates();
-
             }, 250);
 
-            // Cleanup animation lock (500ms)
             setTimeout(() => {
                 isClickAnimating = false;
                 circleBg.classList.remove('animate-click-effect');
             }, 500);
         }
 
-        // Navigate through quote history
         function navigateQuote(direction) {
             const newIndex = currentHistoryIndex + direction;
-
             if (newIndex < 0 || newIndex >= quoteHistory.length) return;
-
-            // Update immediately (no fade)
             currentHistoryIndex = newIndex;
             displayQuote(quoteHistory[currentHistoryIndex]);
             updateArrowStates();
         }
 
-
-        // Event Listeners
         breathingCircle.addEventListener('click', handleNewMeditation);
         breathingCircle.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -439,11 +966,30 @@
                 handleNewMeditation();
             }
         });
-
-        // Navigation arrow listeners
         prevArrow.addEventListener('click', () => navigateQuote(-1));
         nextArrow.addEventListener('click', () => navigateQuote(1));
 
+        /* ── init ─────────────────────────────────── */
+        const siteHeader = document.getElementById('site-header');
+        window.addEventListener('scroll', () => {
+            siteHeader.classList.toggle('is-lifted', window.scrollY > 24);
+        }, { passive: true });
+
+        let activeTopic = null;
+
+        buildLotus();
+        buildLegend();
+        buildAll();
+
+        // redraw the bloom when crossing the compact breakpoint, keeping the open petal
+        compactQuery.addEventListener('change', () => {
+            buildLotus();
+            if (activeTopic) {
+                document.querySelectorAll('.petal-group').forEach(g => {
+                    g.classList.toggle('is-active', g.dataset.topic === activeTopic);
+                });
+            }
+        });
     </script>
 </body>
 
